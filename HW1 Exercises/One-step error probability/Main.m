@@ -19,7 +19,7 @@ for pSize = p
         
         % Only calculate the weights that are going to be used
         weights = pPatterns(i,:)*pPatterns'; 
-        %weights(i) = 0; % w_ii = 0
+        weights(i) = 0; % w_ii = 0
         newX = Sgn(weights*x);% Modified sign function so 0 gives 1
         
         errorP(p_i) = errorP(p_i) + (x(i,1) ~= newX); % Increase if bit changed

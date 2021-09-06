@@ -1,4 +1,4 @@
-function plot = PlotPattern(pattern, width)
-    plot = reshape(pattern, [], width)==1;
+function plot = PlotPattern(pattern, width, height)
+    plot = ~(reshape(pattern, width, height)'==1);
     imshow(plot,'InitialMagnification','fit');
 end
