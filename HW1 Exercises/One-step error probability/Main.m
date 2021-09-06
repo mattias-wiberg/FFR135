@@ -6,29 +6,21 @@ errorP = zeros(size(p)); %Errors for each pattern
 N = 120
 TRIALS = 10^5
 
-p_i = 1;
+p_i = 1
 for pSize = p
     for t = 1:TRIALS
         pPatterns = GetRandomPatterns(N, pSize);
+        weights = Hebbs(pPatterns);
+        weights(eye(size(weights))==1)=0; % Set diagonal to 0 modified hebbs
         
         % Feed one known pattern fed to the network which one dosn't matter
         % since it is random to begin with here I am always using the first
         % one (x).
         i = randi(N);
-        j = randi(N);
-        x_j = pPatterns(j,1); 
+        x = pPatterns(:,1); 
+        newX = Sgn(weights(i,:)*x);% Modified sign function so 0 gives 1
         
-        % Calulate weight
-        w_ij = 0;
-        if i ~= j % Modified Hebb's Rule w_ii=0
-            for u = 1:pSize
-                w_ij = w_ij + pPatterns(i,u)*pPatterns(j,u);
-            end
-            w_ij = w_ij/N;
-        end
-        
-        newX = Sgn(w_ij * x_j); % Modified sign function 0 gives 1
-        errorP(p_i) = errorP(p_i) + (x_j ~= newX); % Increase if bit changed
+        errorP(p_i) = errorP(p_i) + (x(i,1) ~= newX); % Increase if bit changed
     end
     
     pSize
@@ -38,3 +30,5 @@ end
 errorP
 errorP/TRIALS
 plot(p,errorP/TRIALS)
+% 12        24        48        70       100       120
+% 0.0370    1.1610    5.6580    9.3970   13.6150   15.7870 %
