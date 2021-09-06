@@ -18,10 +18,11 @@ for experiment = 1:EXPERIMENTS
     
     for update = 1:T
         i = randi(N);
-        s(i) = Sgn(weights(i,:)*s);
+        s(i) = Sgn(prob(weights(i,:)*s));
         m(experiment) = m(experiment) + 1/N*s'*patterns(:,1);
     end
-    m(experiment) = m(experiment)/T
+    m(experiment) = m(experiment)/T;
+    m(experiment)
 end
 
 sum(m)/EXPERIMENTS
