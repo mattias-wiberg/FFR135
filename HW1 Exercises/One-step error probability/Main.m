@@ -17,14 +17,14 @@ for pSize = p
         i = randi(N);
         x = pPatterns(:,1);
         
-        weights = pPatterns(i,:)*pPatterns'; % Only calculate the weights that are going to be used
-        weights(i) = 0; % w_ii = 0
+        % Only calculate the weights that are going to be used
+        weights = pPatterns(i,:)*pPatterns'; 
+        %weights(i) = 0; % w_ii = 0
         newX = Sgn(weights*x);% Modified sign function so 0 gives 1
         
         errorP(p_i) = errorP(p_i) + (x(i,1) ~= newX); % Increase if bit changed
     end
     
-    pSize
     errorP
     p_i = p_i + 1
 end
@@ -33,4 +33,4 @@ errorP/TRIALS
 plot(p,errorP/TRIALS)
 % 12        24        48        70        100       120
 % 0.0005    0.0114    0.0552    0.0951    0.1363    0.1598      w_ii = 0
-% 
+% 0.0001    0.0031    0.0128    0.0186    0.0209    0.0222      w_ii ~= 0
