@@ -3,14 +3,13 @@ clc
 
 x = [-1 -1 -1; 1 -1 1; -1 1 1; 1 1 -1];
 eta = 0.1;             % Learning rate.
-Nh = 8;                % Amount of hidden nourons.
+Nh = 1;                % Amount of hidden nourons.
 Nv = 3;                % Amount of visible nourons.
 k = 100;               % Amount of updates
 trails = 100;          % Amount of trials
 T = 20;          % Nr of samples in training set.
 g = @(b) tanh(b);        % Activation function
 p = @(b) 1/(1+exp(-2*b)); % Noise function
-
 
 % Initialize weights and thresholds
 w = normrnd(0, 1, [Nv,Nh]);
@@ -74,12 +73,12 @@ end
 %% KL. Div
 clc
 x = [-1 -1 -1
+     1 -1 1
+     -1 1 1
+     1 1 -1
      -1 -1 1
      -1 1 -1
-     -1 1 1
      1 -1 -1
-     1 -1 1
-     1 1 -1
      1 1 1];
 Nout = 1000;
 Nin = 1000;
@@ -91,10 +90,12 @@ for no = 1:Nout
     
     % Update one hidden neuron
     bh = (v'*w)'-th;
-    if rand < p(bh(i))
-        h(i) = 1;
-    else
-        h(i) = -1;
+    for i = 1:Nh
+        if rand < p(bh(i))
+            h(i) = 1;
+        else
+            h(i) = -1;
+        end
     end
     
     for j = 1:Nin
@@ -118,9 +119,14 @@ for no = 1:Nout
         end
         for l = 1:8
             if all(v'==x(l, :))
-                Pb(l)=Pb(l)+(1/(Nout+Nin));
+                Pb(l)=Pb(l)+(1/(Nout*Nin));
             end
         end
     end
 end
 Pb
+KL = 0;
+for i = 1:4
+    KL =KL+log(1/(4*Pb(i)));
+end
+KL=1/4*KL
