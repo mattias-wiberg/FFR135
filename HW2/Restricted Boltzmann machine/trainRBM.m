@@ -62,4 +62,3 @@ function [w,th,tv] = trainRBM(x,Nv,Nh,trails,k, eta)
         th = th + dth;
     end
 end
-
