@@ -40,6 +40,5 @@ options = trainingOptions('adam', ...
     'Verbose',false, ...
     'Plots','training-progress');
 
-%netAe1 = trainNetwork(xTrain, xTrain,layersAe1,options);
+netAe1 = trainNetwork(xTrain, xTrain,layersAe1,options);
 netAe2 = trainNetwork(xTrain, xTrain,layersAe2,options);
-
