@@ -5,9 +5,12 @@ exerciseNumber = 3;
 [xTrain, tTrain, xValid, tValid, xTest, tTest] = LoadMNIST(exerciseNumber);
 xTrain = double(xTrain);
 xTrain = xTrain / 255; %Normalize
+% Reshape
+xTrain = reshape(xTrain(:,:,1,:), 784, 1, []);
+xTrain = reshape(xTrain(:,1,:), 784, []);
 
 layersAe1 = [
-    imageInputLayer([28 28 1])
+    sequenceInputLayer(28*28)
     
     fullyConnectedLayer(50, 'WeightsInitializer', 'glorot')
     reluLayer
@@ -18,7 +21,7 @@ layersAe1 = [
     regressionLayer];
 
 layersAe2 = [
-    imageInputLayer([28 28 1])
+    sequenceInputLayer(28*28)
     
     fullyConnectedLayer(50, 'WeightsInitializer', 'glorot')
     reluLayer
@@ -33,11 +36,9 @@ options = trainingOptions('adam', ...
     'InitialLearnRate',0.001, ...
     'Shuffle','every-epoch', ...
     'MaxEpochs',800, ...
-    'ExecutionEnvironment', 'gpu', ...
-    'ValidationData',{xValid, tValid}, ...
     'ValidationFrequency',30, ...
     'Verbose',false, ...
     'Plots','training-progress');
 
-net = trainNetwork(xTrain, tTrain,layersAe1,options);
+net = trainNetwork(xTrain, xTrain,layersAe1,options);
 YPred = classify(net,xTest2);
