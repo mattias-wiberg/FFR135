@@ -2,7 +2,6 @@ xTest2 = loadmnist2();
 exerciseNumber = 3;
 [xTrain, tTrain, xValid, tValid, xTest, tTest] = LoadMNIST(exerciseNumber);
 
-
 layers = [
     imageInputLayer([28 28 1])
     
