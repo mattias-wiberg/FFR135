@@ -40,5 +40,6 @@ options = trainingOptions('adam', ...
     'Verbose',false, ...
     'Plots','training-progress');
 
-net = trainNetwork(xTrain, xTrain,layersAe1,options);
-YPred = classify(net,xTest2);
+%netAe1 = trainNetwork(xTrain, xTrain,layersAe1,options);
+netAe2 = trainNetwork(xTrain, xTrain,layersAe2,options);
+
