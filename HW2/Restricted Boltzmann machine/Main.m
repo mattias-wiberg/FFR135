@@ -11,7 +11,7 @@ x = [-1 -1 -1
      1 1 1];
 eta = 0.1;             % Learning rate.
 Nh = [1 2 4 8];        % Amount of hidden nourons.
-avgTimes = 20;     
+avgTimes = 50;     
 Nv = 3;                % Amount of visible nourons.
 k = 100;               % Amount of updates
 trails = 1000;          % Amount of trials
