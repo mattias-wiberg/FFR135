@@ -45,11 +45,13 @@ options = trainingOptions('adam', ...
 netAe1 = trainNetwork(xTrain, xTrain,layersAe1,options);
 netAe2 = trainNetwork(xTrain, xTrain,layersAe2,options);
 %% Auto Encoder 1
+net = netAe1;
 layers_encode = [netAe1.Layers(1:5); regressionLayer];
 layers_decode = [sequenceInputLayer(2); netAe1.Layers(6:8)];
 net_encode = assembleNetwork(layers_encode);
 net_decode = assembleNetwork(layers_decode);
 %% Auto Encoder 2
+net = netAe2;
 layers_encode = [netAe2.Layers(1:5); regressionLayer];
 layers_decode = [sequenceInputLayer(4); netAe2.Layers(6:8)];
 net_encode = assembleNetwork(layers_encode);
@@ -86,7 +88,7 @@ for i = 1:10
     array = classified_points(i).arr;
     if ~isempty(array)
         scatter(array(1,:), array(2,:), 'filled');
-        legends = [legends num2str(i)+""];
+        legends = [legends num2str(i-1)+""];
     end
     hold on;
 end

@@ -11,11 +11,11 @@ x = [-1 -1 -1
      1 1 1];
 eta = 0.1;             % Learning rate.
 Nh = [1 2 4 8];        % Amount of hidden nourons.
-avgTimes = 500;     
+avgTimes = 20;     
 Nv = 3;                % Amount of visible nourons.
 k = 100;               % Amount of updates
-trails = 100;          % Amount of trials
-Nout = [500 1000 2000];
+trails = 1000;          % Amount of trials
+Nout = 1000;
 Nin = 1000;
 
 Pbs = zeros(length(Nh), 8, length(Nout));
