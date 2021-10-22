@@ -12,8 +12,6 @@ N = 500; % Reservoir
 tSteps = 500; % Time steps
 tTrain = size(xTrain, 2); % Training Steps
 
-
-
 % Init weights to mean zero
 wInVar = 0.002;
 wVar = 2/N;
