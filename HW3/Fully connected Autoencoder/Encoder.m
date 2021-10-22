@@ -6,9 +6,14 @@ exerciseNumber = 3;
 [xTrain, tTrain, xValid, tValid, xTest, tTest] = LoadMNIST(exerciseNumber);
 xTrain = double(xTrain);
 xTrain = xTrain / 255; %Normalize
+xTest = double(xTest);
+xTest = xTest / 255; %Normalize
 % Reshape
 xTrain = reshape(xTrain(:,:,1,:), 784, 1, []);
 xTrain = reshape(xTrain(:,1,:), 784, []);
+
+xTest = reshape(xTest(:,:,1,:), 784, 1, []);
+xTest = reshape(xTest(:,1,:), 784, []);
 
 layersAe1 = [
     sequenceInputLayer(28*28)
@@ -60,22 +65,23 @@ net_decode = assembleNetwork(layers_decode);
 for i = 1:10
     classified_points(i).arr = [];
 end
-amount = 200;
+amount = 50;
 hold off;
 fig = figure(1);
+data = xTest;
 
 for i = 1:amount
     subplot(1,2,1);
-    imshow(reshape(xTrain(:, i), 28, 28));
+    imshow(reshape(data(:, i), 28, 28));
     subplot(1,2,2);
-    Y = predict(net, xTrain(:, i));
+    Y = predict(net, data(:, i));
     imshow(reshape(Y, 28, 28));
+    point = predict(net_encode, data(:, i))
     figure(fig); % Focus figure
     
     k = waitforbuttonpress;
-    % anything else (deny)
-    if 13 == double(get(gcf,'CurrentCharacter'))
-        point = predict(net_encode, xTrain(:, i));
+    % If enter
+    if 13 ~= double(get(gcf,'CurrentCharacter'))
         index = double(tTrain(i));
         classified_points(index).arr = [classified_points(index).arr point];
     end 
@@ -87,9 +93,13 @@ legends = [];
 for i = 1:10
     array = classified_points(i).arr;
     if ~isempty(array)
-        scatter(array(1,:), array(2,:), 'filled');
+        scatter(array(1,:), array(2,:), 'x');
         legends = [legends num2str(i-1)+""];
     end
     hold on;
 end
-legend(legends);
+scatter(bad_points(1,:), bad_points(2,:), 'x', 'black');
+legend([legends "poor conversion"]);
+%% Concat classified Points
+array = [];
+bad_points = [array classified_points(1:10).arr]
