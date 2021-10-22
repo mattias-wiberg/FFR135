@@ -2,6 +2,8 @@ xTest2 = loadmnist2();
 exerciseNumber = 3;
 [xTrain, tTrain, xValid, tValid, xTest, tTest] = LoadMNIST(exerciseNumber);
 
+% Layer Values taken from MathWorks 'Create Simple Deep Learning Network
+% for Classification'
 layers = [
     imageInputLayer([28 28 1])
     
@@ -36,5 +38,5 @@ options = trainingOptions('sgdm', ...
 
 
 
-net = trainNetwork(xTrain, tTrain,layers,options);
-YPred = classify(net,xTest2);
+network = trainNetwork(xTrain, tTrain,layers,options);
+yPrediction = classify(network,xTest2);
