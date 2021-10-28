@@ -26,13 +26,13 @@ for game = 1:nGames
     board = playPlayer(-1, board, Q2, epsilon);
     updateTable(Q1, board, alpha, R, gamma);
     while ~gameOver()
-        playPlayer(1);
+        playPlayer(1, board, Q1, epsilon);
         if gameOver()
             break;
         else
             updateTable(Q2, board, alpha, R, gamma);
         end
-        playPlayer(2);
+        playPlayer(-1, board, Q2, epsilon);
         if gameOver()
             break;
         else
