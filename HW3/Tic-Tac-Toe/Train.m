@@ -5,6 +5,8 @@
 % Where
 % R = reward (1 = win , 0 = draw, -1 = loss)
 % max(Q(s',a')) = expected future reward(R)
+clc;
+clear;
 alpha = 0.1; % learning rate
 gamma = 1; % discount factor (how long in the feature are you looking)
 % Greedy parameter decrease with beta = 0.95 each 100 games (Exploration)
@@ -13,7 +15,7 @@ gamma = 1; % discount factor (how long in the feature are you looking)
 epsilon = 1;
 beta = 0.95;
 
-nGames = 30000;
+nGames = 5000;
 
 % There are two agents player 1 and 2 with each own Q table
 % Q tables
@@ -24,24 +26,26 @@ for game = 1:nGames
     board = initilizeBoard(3,3);
     board = playPlayer(1, board, Q1, epsilon);
     board = playPlayer(-1, board, Q2, epsilon);
-    updateTable(Q1, board, alpha, R, gamma);
-    while ~gameOver()
-        playPlayer(1, board, Q1, epsilon);
-        if gameOver()
+    Q1 = addToTable(Q1, board);
+    
+    while ~gameOver(board)
+        board = playPlayer(1, board, Q1, epsilon);
+        if gameOver(board)
             break;
         else
-            updateTable(Q2, board, alpha, R, gamma);
+            Q2 = addToTable(Q2, board);
         end
-        playPlayer(-1, board, Q2, epsilon);
-        if gameOver()
+        board = playPlayer(-1, board, Q2, epsilon);
+        if gameOver(board)
             break;
         else
-            updateTable(Q1, board, alpha, R, gamma);
+            Q1 = addToTable(Q1, board);
         end
     end
-    [~, R] = gameOver();
-    updateTable(Q1, mark, board, alpha, R, gamma, epsilon)
-    updateTable(Q2, mark, board, alpha, R, gamma, epsilon)
+    
+    [~, R] = gameOver(board);
+    %Q1 = updateTable(Q1, 1, board, alpha, R, gamma, epsilon)
+    %Q2 = updateTable(Q2, -1, board, alpha, R, gamma, epsilon)
     
     
     if mod(game, 100) == 0
