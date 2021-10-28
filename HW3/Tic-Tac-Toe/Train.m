@@ -22,21 +22,21 @@ Q2 = cell(2,1,1); % Player 2 (O)
 
 for game = 1:nGames
     board = initilizeBoard(3,3);
-    board = playPlayer(1, board);
-    board = playPlayer(2, board);
-    updateQ(1);
+    board = playPlayer(1, board, Q1, epsilon);
+    board = playPlayer(-1, board, Q2, epsilon);
+    updateTable(Q1, board, alpha, R, gamma);
     while ~gameOver()
         playPlayer(1);
         if gameOver()
             break;
         else
-            updateQ(2)
+            updateTable(Q2, board, alpha, R, gamma);
         end
         playPlayer(2);
         if gameOver()
             break;
         else
-            updateQ(1);
+            updateTable(Q1, board, alpha, R, gamma);
         end
     end
     if mod(game, 100) == 0
