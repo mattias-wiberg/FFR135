@@ -39,8 +39,12 @@ for game = 1:nGames
             updateTable(Q1, board, alpha, R, gamma);
         end
     end
+    [~, R] = gameOver();
+    updateTable(Q1, mark, board, alpha, R, gamma, epsilon)
+    updateTable(Q2, mark, board, alpha, R, gamma, epsilon)
+    
+    
     if mod(game, 100) == 0
         epsilon = epsilon * beta;
     end
-    giveRewards();
 end

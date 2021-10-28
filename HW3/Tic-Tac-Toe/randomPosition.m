@@ -1,5 +1,6 @@
 function index = randomPosition(board)
     % Gives random available position
-    [~, index] = max(rand(size(board)).*board.^2,[],'all', 'linear');
+    possiblePositions = (1-board.^2);
+    [~, index] = max(rand(size(board)).*possiblePositions,[],'all', 'linear');
 end
 
