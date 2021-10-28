@@ -3,7 +3,7 @@
 % in other words state action pairs.
 % Update for Q(s,a) <- Q(s,a)+alpha*(R+gamma*max(Q(s',a'))-Q(s,a))
 % Where
-% R = reward
+% R = reward (1 = win , 0 = draw, -1 = loss)
 % max(Q(s',a')) = expected future reward(R)
 alpha = 0.1; % learning rate
 gamma = 1; % discount factor (how long in the feature are you looking)
@@ -17,13 +17,13 @@ nGames = 30000;
 
 % There are two agents player 1 and 2 with each own Q table
 % Q tables
-Q1; % Player 1
-Q2; % Player 2
+Q1 = cell(2,1,1); % Player 1 (X)
+Q2 = cell(2,1,1); % Player 2 (O)
 
 for game = 1:nGames
-    board = initilizeBoard();
-    playPlayer(1);
-    playPlayer(2);
+    board = initilizeBoard(3,3);
+    board = playPlayer(1, board);
+    board = playPlayer(2, board);
     updateQ(1);
     while ~gameOver()
         playPlayer(1);
@@ -39,6 +39,8 @@ for game = 1:nGames
             updateQ(1);
         end
     end
-    epsilon = epsilon * beta;
+    if mod(game, 100) == 0
+        epsilon = epsilon * beta;
+    end
     giveRewards();
 end
