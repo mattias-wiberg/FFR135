@@ -1,4 +1,4 @@
-function [index, matrix] = findMatch(cellArray, needle)
+function [index, matrix] = findState(cellArray, needle)
     for index = 1:length(cellArray(1,:))
         if isequal(cellArray{1,index}, needle)
             matrix = cellArray{1,index};

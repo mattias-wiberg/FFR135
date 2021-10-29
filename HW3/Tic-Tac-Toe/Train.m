@@ -13,42 +13,57 @@ gamma = 1; % discount factor (how long in the feature are you looking)
 % Select action with biggest value in q table and random action
 % (best included) with 1-epsilon prob
 epsilon = 1;
+gamesBeforeDecay = 10^5;
+gamesPerDecay = 100;
 beta = 0.95;
 
-nGames = 5000;
+nGames = 30000;
 
 % There are two agents player 1 and 2 with each own Q table
 % Q tables
 Q1 = cell(2,1,1); % Player 1 (X)
-Q2 = cell(2,1,1); % Player 2 (O)
+Q1{1,1} = zeros(3,3);
+Q1{2,1} = zeros(3,3);
+Q2 = Q1; % Player 2 (O)
+history = [];
 
 for game = 1:nGames
-    board = initilizeBoard(3,3);
-    board = playPlayer(1, board, Q1, epsilon);
-    board = playPlayer(-1, board, Q2, epsilon);
-    Q1 = addToTable(Q1, board);
+    history(:,:,1) = initilizeBoard(3,3);
+    [history(:,:,2), lastMoveP1] = playPlayer(1, history(:,:,1), Q1, epsilon);
+    [history(:,:,3), lastMoveP2] = playPlayer(-1, history(:,:,2), Q2, epsilon);
     
-    while ~gameOver(board)
-        board = playPlayer(1, board, Q1, epsilon);
-        if gameOver(board)
+    Q1 = updateTable(Q1, history(:,:,end-2), history(:,:,end), alpha, 0, gamma, lastMoveP1)
+    
+    while ~gameOver(history(:,:,1))
+        [history(:,:,end+1), newMove] = playPlayer(1, history(:,:,end), Q1, epsilon);
+        [over, R] = gameOver(history(:,:,end));
+        if over
+            Q1 = updateTable(Q1, history(:,:,end-1), history(:,:,end), alpha, R(1), gamma, newMove);
+            Q2 = updateTable(Q2, history(:,:,end-2), history(:,:,end), alpha, R(2), gamma, lastMoveP2);
             break;
         else
-            Q2 = addToTable(Q2, board);
+            Q2 = updateTable(Q2, history(:,:,end-2), history(:,:,end), alpha, 0, gamma, lastMoveP2);
         end
-        board = playPlayer(-1, board, Q2, epsilon);
-        if gameOver(board)
+        lastMoveP1 = newMove;
+        
+        [history(:,:,end+1), newMove] = playPlayer(-1, history(:,:,end), Q2, epsilon);
+        [over, R] = gameOver(history(:,:,end));
+        if over
+            [~, R] = gameOver(history(:,:,end));
+            Q2 = updateTable(Q2, history(:,:,end-1), history(:,:,end), alpha, R(2), gamma, newMove);
+            Q1 = updateTable(Q1, history(:,:,end-2), history(:,:,end), alpha, R(1), gamma, lastMoveP1);
             break;
         else
-            Q1 = addToTable(Q1, board);
+            Q1 = updateTable(Q1, history(:,:,end-2), history(:,:,end), alpha, 0, gamma, lastMoveP1);
         end
+        lastMoveP2 = newMove;
     end
     
-    [~, R] = gameOver(board);
-    %Q1 = updateTable(Q1, 1, board, alpha, R, gamma, epsilon)
-    %Q2 = updateTable(Q2, -1, board, alpha, R, gamma, epsilon)
-    
-    
-    if mod(game, 100) == 0
-        epsilon = epsilon * beta;
+    if game > gamesBeforeDecay % 1 for the first 10^4 games
+        if mod(game, gamesPerDecay) == 0 % each 100 games
+            epsilon = epsilon * beta;
+        end
     end
 end
+
+%%
