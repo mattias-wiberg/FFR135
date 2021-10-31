@@ -13,11 +13,11 @@ gamma = 1; % discount factor (how long in the feature are you looking)
 % Select action with biggest value in q table and random action
 % (best included) with 1-epsilon prob
 epsilon = 1;
-gamesBeforeDecay = 10000;
+gamesBeforeDecay = 1000;
 gamesPerDecay = 100;
 beta = 0.95;
-
 nGames = 30000;
+winnerHistory = zeros(1, nGames);
 
 % There are two agents player 1 and 2 with each own Q table
 % Q tables
@@ -58,6 +58,8 @@ for game = 1:nGames
         lastMoveP2 = newMove;
     end
     
+    winnerHistory(game) = R(1);
+    
     if game > gamesBeforeDecay % 1 for the first 10^4 games
         if mod(game, gamesPerDecay) == 0 % each 100 games
             fprintf("Game %d\n", game);
@@ -67,3 +69,4 @@ for game = 1:nGames
 end
 
 %%
+reshape(winnerHistory, 30,[])

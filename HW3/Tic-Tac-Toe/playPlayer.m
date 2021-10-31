@@ -6,7 +6,7 @@ function [newBoard, move] = playPlayer(mark, board, Q, epsilon)
     else % Pick best expected future reward position
         [i, M] = findState(Q, board);
         if i ~= -1 % State found
-            [~, move] = max(M, [], 'all', 'linear');
+            [~, move] = max(Q{2,i}, [], 'all', 'linear');
         end
         newBoard(move) = mark;
     end
