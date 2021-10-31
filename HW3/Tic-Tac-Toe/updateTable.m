@@ -14,7 +14,7 @@ function Q = updateTable(Q, oldBoard, board, alpha, R, gamma, lastMove)
         maxA = max(Q{2,i}, [], 'all'); % New max
         Q{2, oldi}(lastMove) = Qt + alpha*(gamma*maxA - Qt);
     else % at terminal state (no Q(s',a'))
-        Q{2, oldi}(lastMove) = Qt + alpha*(R - Q{2,i});
+        Q{2, oldi}(lastMove) = Qt + alpha*(R - Qt);
     end
 end
 
