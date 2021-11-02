@@ -7,6 +7,8 @@ function [newBoard, move] = playPlayer(mark, board, Q, epsilon)
         [i, M] = findState(Q, board);
         if i ~= -1 % State found
             [~, move] = max(Q{2,i}, [], 'all', 'linear');
+            b = board;
+            q=Q{2,i};
         end
         newBoard(move) = mark;
     end
